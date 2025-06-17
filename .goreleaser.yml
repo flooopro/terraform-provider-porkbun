@@ -1,0 +1,64 @@
+# .goreleaser.yml
+# Visit https://goreleaser.com/customization/ for more options
+project_name: terraform-provider-porkbun
+
+# .goreleaser.yml
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+
+builds:
+  - id: terraform-provider-porkbun
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    # The main.go file is in the root in your repo. If it were in a cmd/ folder,
+    # you would change this to ./cmd/terraform-provider-porkbun
+    main: .
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    binary: '{{ .ProjectName }}_v{{ .Version }}'
+
+archives:
+  - id: terraform-provider-porkbun
+    builds:
+      - terraform-provider-porkbun
+    # The naming scheme is required by the Terraform Registry.
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format: zip
+    # This removes the folder structure from the zip file
+    wrap_in_directory: false
+
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  algorithm: sha256
+
+signs:
+  - cmd: gpg
+    args:
+      - --output
+      - ${signature}
+      - --detach-sign
+      - ${artifact}
+    artifacts: checksum
+    output: true
+
+release:
+  # This configuration is used to publish the release on GitHub.
+  provider: github
+  
+  # This is the magic part that publishes to the Terraform Registry.
+  # GoReleaser will call the Registry API to publish the provider.
+  # The `owner` should be your GitHub username or organization.
+  # The `namespace` is what you defined in the README, in your case "flooopro".
+  terraform_registry:
+    owner: "flooopro"
+    namespace: "flooopro"
+
+# modeline...
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj

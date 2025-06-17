@@ -49,16 +49,7 @@ signs:
     output: true
 
 release:
-  # This configuration is used to publish the release on GitHub.
-  provider: github
-  
-  # This is the magic part that publishes to the Terraform Registry.
-  # GoReleaser will call the Registry API to publish the provider.
-  # The `owner` should be your GitHub username or organization.
-  # The `namespace` is what you defined in the README, in your case "flooopro".
-  terraform_registry:
+  github:
     owner: "flooopro"
-    namespace: "flooopro"
-
-# modeline...
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+    name: "terraform-provider-porkbun"
+  

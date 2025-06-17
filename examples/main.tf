@@ -2,7 +2,7 @@ terraform {
   required_providers {
     porkbun = {
       source  = "github.com/flooopro/porkbun"
-      version = "0.0.1-SNAPSHOT"
+      version = "0.0.1"
     }
   }
 }
